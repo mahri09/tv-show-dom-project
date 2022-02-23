@@ -1,3 +1,55 @@
 #root {
-  color: red;
+  color: #000;
+  align-items: center;
+  background-color: rgb(243, 243, 243);
+}
+
+.card-body {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: 1550px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.card {
+  width: 370px;
+  height: 550px;
+  background-color: #fff;
+  margin: 1rem;
+  border-radius: 6px;
+  box-shadow: 0 0.15em 0.175em hsla(0, 0%, 0%, 0.1);
+  color: rgb(94, 93, 93);
+}
+
+.card:hover {
+  color: rgb(236, 235, 248);
+  background-color: rgb(94, 93, 93);
+}
+
+.card-image {
+  width: 100%;
+}
+
+.card-image img {
+  border-radius: 6px 6px 0 0;
+  width: 100%;
+}
+
+.card-title {
+  padding: 0 1rem;
+  font-size: 1.7rem;
+}
+
+.card p {
+  padding: 0 1rem;
+  font-size: 1.2rem;
+}
+
+footer a,
+footer p {
+  width: 100%;
+  font-size: 1.2rem;
+  padding: 1rem;
 }
