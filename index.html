@@ -5,16 +5,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>TV Show Project | My Name Mahri(mahri09)</title>
     <link href="style.css" rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Architects+Daughter&family=Fuzzy+Bubbles&family=M+PLUS+1p:wght@300&display=swap"
+      rel="stylesheet"
+    />
     <link rel="icon" href="/favicon.ico" type="image/x-icon" />
   </head>
 
   <body>
-    <div id="root"></div>
-    <!-- <h2>Hello, this is my tv show app link :</h2>
+    <div class="root">
+      <div class="search-container">
+        <input type="text" id="search-input" placeholder="Search" />
+        <i class="fa-solid fa-magnifying-glass"></i>
+      </div>
+      <p class="display-length"></p>
+      <div id="card-body"></div>
+      <!-- <h2>Hello, this is my tv show app link :</h2>
     <a href="https://cyf-mahri09-tv.netlify.app/"
       >https://cyf-mahri09-tv.netlify.app/</a
     > -->
-    <!-- Loads a provided function called getAllEpisodes() which returns all episodes -->
+      <!-- Loads a provided function called getAllEpisodes() which returns all episodes -->
+    </div>
     <script src="./shows.js"></script>
     <script src="./episodes.js"></script>
 

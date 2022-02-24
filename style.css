@@ -1,10 +1,62 @@
-#root {
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  height: 100%;
+  font-size: 16px;
+  line-height: 1.5rem;
+  font-family: "M PLUS 1p", sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+.root {
+  width: 100%;
+  text-align: center;
+  min-height: calc(100vh - 70px);
   color: #000;
   align-items: center;
   background-color: rgb(243, 243, 243);
 }
 
-.card-body {
+.display-length {
+  margin-top: 1rem;
+  font-size: 1.2rem;
+  color: rgb(180, 21, 21);
+}
+.search-container {
+  background-color: rgb(243, 243, 243);
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  padding-top: 2rem;
+}
+
+input {
+  width: 0;
+  border: none;
+  outline: none;
+}
+.is-hidden {
+  display: none;
+}
+
+input#search-input {
+  grid-column: 3/4;
+  width: 280px;
+  border-radius: 6px;
+  border: 1px solid #eee;
+  padding: 8px 5px;
+  transition: 0.3s width ease-in;
+  font-size: 16px;
+  box-shadow: 0 1px 5px 2px rgba(0, 0, 0, 0.3);
+}
+
+input#search-input:hover {
+  width: 350px;
+}
+#card-body {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
@@ -38,13 +90,14 @@
 }
 
 .card-title {
+  margin: 1rem 0;
   padding: 0 1rem;
-  font-size: 1.7rem;
+  font-size: 1.6rem;
 }
 
 .card p {
   padding: 0 1rem;
-  font-size: 1.2rem;
+  font-size: 1rem;
 }
 
 footer a,
@@ -52,4 +105,8 @@ footer p {
   width: 100%;
   font-size: 1.2rem;
   padding: 1rem;
+}
+
+footer {
+  height: 50px;
 }
