@@ -10,6 +10,28 @@ html {
   line-height: 1.5rem;
   font-family: "M PLUS 1p", sans-serif;
   -webkit-font-smoothing: antialiased;
+  background-color: rgb(243, 243, 243);
+}
+
+header {
+  width: 1150px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+  display: flex;
+  border-bottom: 1px solid rgb(216, 209, 209);
+}
+
+header .logo {
+  width: 70px;
+  border-radius: 6px;
+}
+
+header h1 {
+  margin-left: 3rem;
+  padding-top: 1.5rem;
+  font-size: 1.5rem;
+  color: rgb(59, 50, 50);
 }
 
 .root {
@@ -18,19 +40,28 @@ html {
   min-height: calc(100vh - 70px);
   color: #000;
   align-items: center;
-  background-color: rgb(243, 243, 243);
+}
+
+.search-container {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  padding-top: 2rem;
 }
 
 .display-length {
+  grid-column: 5/7;
   margin-top: 1rem;
   font-size: 1.2rem;
-  color: rgb(180, 21, 21);
+  color: rgb(206, 41, 41);
 }
-.search-container {
-  background-color: rgb(243, 243, 243);
-  display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  padding-top: 2rem;
+
+#select-episode {
+  font-size: 1rem;
+  grid-column: 3/4;
+  margin: 0 2rem;
+  width: 280px;
+  border: 1px solid rgb(173, 172, 172);
+  box-shadow: 0 1px 5px 2px rgba(0, 0, 0, 0.3);
 }
 
 input {
@@ -43,7 +74,7 @@ input {
 }
 
 input#search-input {
-  grid-column: 3/4;
+  grid-column: 4/5;
   width: 280px;
   border-radius: 6px;
   border: 1px solid #eee;

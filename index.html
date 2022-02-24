@@ -13,17 +13,20 @@
   </head>
 
   <body>
+    <header>
+      <img src="./images/tv-shows-logo.jpg" class="logo" alt="tv-shows-logo" />
+      <h1>Welcome to TV Show Website!</h1>
+    </header>
     <div class="root">
       <div class="search-container">
+        <select name="episodes" id="select-episode">
+          <option value="starter" selected>Choose one Episode</option>
+        </select>
         <input type="text" id="search-input" placeholder="Search" />
-        <i class="fa-solid fa-magnifying-glass"></i>
+        <!-- <i class="fa-solid fa-magnifying-glass"></i> -->
+        <p class="display-length"></p>
       </div>
-      <p class="display-length"></p>
       <div id="card-body"></div>
-      <!-- <h2>Hello, this is my tv show app link :</h2>
-    <a href="https://cyf-mahri09-tv.netlify.app/"
-      >https://cyf-mahri09-tv.netlify.app/</a
-    > -->
       <!-- Loads a provided function called getAllEpisodes() which returns all episodes -->
     </div>
     <script src="./shows.js"></script>
