@@ -1,3 +1,9 @@
+:root {
+  --main-bg-color: rgb(243, 243, 243);
+  --main-color: rgb(59, 50, 50);
+  --text-color: rgb(94, 93, 93);
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -10,7 +16,7 @@ html {
   line-height: 1.5rem;
   font-family: "M PLUS 1p", sans-serif;
   -webkit-font-smoothing: antialiased;
-  background-color: rgb(243, 243, 243);
+  background-color: var(--main-bg-color);
 }
 
 header {
@@ -19,7 +25,7 @@ header {
   padding: 2rem;
   text-align: center;
   display: flex;
-  border-bottom: 1px solid rgb(216, 209, 209);
+  border-bottom: 1px solid rgb(196, 193, 193);
 }
 
 header .logo {
@@ -31,7 +37,7 @@ header h1 {
   margin-left: 3rem;
   padding-top: 1.5rem;
   font-size: 1.5rem;
-  color: rgb(59, 50, 50);
+  color: var(--main-color);
 }
 
 .root {
@@ -103,7 +109,7 @@ input#search-input:hover {
   margin: 1rem;
   border-radius: 6px;
   box-shadow: 0 0.15em 0.175em hsla(0, 0%, 0%, 0.1);
-  color: rgb(94, 93, 93);
+  color: var(--text-color);
 }
 
 .card:hover {
