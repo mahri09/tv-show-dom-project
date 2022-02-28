@@ -1,15 +1,22 @@
-const allEpisodes = getAllEpisodes();
+let allEpisodes;
 const cardBody = document.getElementById("card-body");
 const searchInput = document.getElementById("search-input");
 const selectInput = document.getElementById("select-episode");
 const displayLength = document.querySelector(".display-length");
 
 function setup() {
-  makePageForEpisodes(allEpisodes);
-  select(allEpisodes);
+  fetchMovies().then((result) => {
+    allEpisodes = result;
+    console.log(result);
+    makePageForEpisodes(allEpisodes);
+    select(allEpisodes);
+  });
 }
 
 const twoDigit = (n) => (n < 10 ? "0" + n : n);
+const limitText = (text) =>
+  text.length > 10 ? (text = text.substring(0, 200) + "...</p>") : text;
+
 const createEpisodeCards = (episode) => {
   // Create card element
   return `
@@ -20,7 +27,7 @@ const createEpisodeCards = (episode) => {
       <h2 class='card-title'> ${episode.name} - S${twoDigit(
     episode.season
   )}E${twoDigit(episode.number)} </h2>
-      ${episode.summary}
+      ${limitText(episode.summary)}
     </div>
       `;
 };
@@ -75,5 +82,18 @@ selectInput.addEventListener("change", (e) => {
   cardBody.innerHTML = "";
   makePageForEpisodes(filteredArr);
 });
+
+async function fetchMovies() {
+  try {
+    const response = await fetch("https://api.tvmaze.com/shows/22036/episodes");
+    if (!response.ok) {
+      const message = `An error has occured: ${response.status}`;
+      throw new Error(message);
+    }
+    return await response.json();
+  } catch (e) {
+    console.log(e);
+  }
+}
 
 window.onload = setup;
