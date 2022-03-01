@@ -61,9 +61,7 @@ const select = (listOfItems, selectFor) => {
   listOfItems.forEach((item) => {
     let option = document.createElement("option");
     option.setAttribute("value", "starter");
-    option.innerText = selectEpisodesStarter
-      ? "Choose one Episode"
-      : "Show All Episodes";
+    option.innerText = "Choose one Show";
     if (selectFor === "shows") {
       option.setAttribute("value", item.id);
       option.innerText = item.name;
@@ -82,7 +80,6 @@ const select = (listOfItems, selectFor) => {
 };
 
 selectEpisodes.addEventListener("change", (e) => {
-  console.log();
   if (e.target.value === "starter") {
     makePageForEpisodes(allEpisodes);
   } else {
@@ -104,7 +101,8 @@ selectShows.addEventListener("change", (e) => {
   console.log(urlShowId);
   fetchMovies().then((result) => {
     allEpisodes = result;
-    selectEpisodes.innerHTML = "";
+    selectEpisodes.innerHTML =
+      '<option value="starter" selected>Choose one Episodes</option>';
     select(allEpisodes, "episodes");
     cardBody.innerHTML = "";
     makePageForEpisodes(allEpisodes);
