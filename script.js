@@ -1,22 +1,25 @@
 let allEpisodes;
+let allShows = getAllShows();
 const cardBody = document.getElementById("card-body");
 const searchInput = document.getElementById("search-input");
-const selectInput = document.getElementById("select-episode");
+let selectEpisodes = document.getElementById("select-episode");
 const displayLength = document.querySelector(".display-length");
+const selectShows = document.getElementById("select-shows");
+let urlShowId = 82;
 
 function setup() {
   fetchMovies().then((result) => {
     allEpisodes = result;
-    console.log(result);
     makePageForEpisodes(allEpisodes);
-    select(allEpisodes);
+    select(allEpisodes, "episodes");
   });
+  select(allShows, "shows");
 }
 
 const twoDigit = (n) => (n < 10 ? "0" + n : n);
-const limitText = (text) =>
-  text.length > 10 ? (text = text.substring(0, 200) + "...</p>") : text;
-
+const limitText = (text) => {
+  return text.length > 10 ? (text = text.substring(0, 200) + "...</p>") : text;
+};
 const createEpisodeCards = (episode) => {
   // Create card element
   return `
@@ -53,39 +56,66 @@ const search = (e) => {
 
 searchInput.addEventListener("input", search);
 
-const select = (episodeList) => {
-  episodeList.forEach((episode) => {
+let selectEpisodesStarter = false;
+const select = (listOfItems, selectFor) => {
+  listOfItems.forEach((item) => {
     let option = document.createElement("option");
-    option.setAttribute(
-      "value",
-      `S${twoDigit(episode.season)}E${twoDigit(episode.number)} - ${
-        episode.name
-      }`
-    );
-    option.innerText = `S${twoDigit(episode.season)}E${twoDigit(
-      episode.number
-    )} - ${episode.name}`;
-    selectInput.appendChild(option);
+    option.setAttribute("value", "starter");
+    option.innerText = selectEpisodesStarter
+      ? "Choose one Episode"
+      : "Show All Episodes";
+    if (selectFor === "shows") {
+      option.setAttribute("value", item.id);
+      option.innerText = item.name;
+      selectShows.appendChild(option);
+    } else if (selectFor === "episodes") {
+      option.setAttribute(
+        "value",
+        `S${twoDigit(item.season)}E${twoDigit(item.number)} - ${item.name}`
+      );
+      option.innerText = `S${twoDigit(item.season)}E${twoDigit(
+        item.number
+      )} - ${item.name}`;
+      selectEpisodes.appendChild(option);
+    }
   });
 };
 
-selectInput.addEventListener("change", (e) => {
-  console.log(e.target.value);
-  let filteredArr = allEpisodes.filter((episode) => {
-    return (
-      `S${twoDigit(episode.season)}E${twoDigit(episode.number)} - ${
-        episode.name
-      }` === e.target.value
-    );
+selectEpisodes.addEventListener("change", (e) => {
+  console.log();
+  if (e.target.value === "starter") {
+    makePageForEpisodes(allEpisodes);
+  } else {
+    let filteredArr = allEpisodes.filter((episode) => {
+      return (
+        `S${twoDigit(episode.season)}E${twoDigit(episode.number)} - ${
+          episode.name
+        }` === e.target.value
+      );
+    });
+    selectEpisodesStarter = true;
+    cardBody.innerHTML = "";
+    makePageForEpisodes(filteredArr);
+  }
+});
+
+selectShows.addEventListener("change", (e) => {
+  urlShowId = e.target.value;
+  console.log(urlShowId);
+  fetchMovies().then((result) => {
+    allEpisodes = result;
+    selectEpisodes.innerHTML = "";
+    select(allEpisodes, "episodes");
+    cardBody.innerHTML = "";
+    makePageForEpisodes(allEpisodes);
   });
-  console.log(filteredArr);
-  cardBody.innerHTML = "";
-  makePageForEpisodes(filteredArr);
 });
 
 async function fetchMovies() {
   try {
-    const response = await fetch("https://api.tvmaze.com/shows/22036/episodes");
+    const response = await fetch(
+      `https://api.tvmaze.com/shows/${urlShowId}/episodes`
+    );
     if (!response.ok) {
       const message = `An error has occured: ${response.status}`;
       throw new Error(message);

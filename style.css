@@ -56,18 +56,25 @@ header h1 {
 
 .display-length {
   grid-column: 5/7;
+  grid-row: 2;
   margin-top: 1rem;
   font-size: 1.2rem;
   color: rgb(206, 41, 41);
 }
 
-#select-episode {
-  font-size: 1rem;
-  grid-column: 3/4;
+select {
   margin: 0 2rem;
   width: 280px;
+  font-size: 1rem;
+
   border: 1px solid rgb(173, 172, 172);
   box-shadow: 0 1px 5px 2px rgba(0, 0, 0, 0.3);
+}
+#select-shows {
+  grid-column: 3/4;
+}
+#select-episode {
+  grid-column: 4/5;
 }
 
 input {
@@ -80,7 +87,7 @@ input {
 }
 
 input#search-input {
-  grid-column: 4/5;
+  grid-column: 5/6;
   width: 280px;
   border-radius: 6px;
   border: 1px solid #eee;
@@ -93,6 +100,7 @@ input#search-input {
 input#search-input:hover {
   width: 350px;
 }
+
 #card-body {
   display: flex;
   flex-wrap: wrap;
@@ -104,7 +112,7 @@ input#search-input:hover {
 
 .card {
   width: 370px;
-  height: 500px;
+  height: 480px;
   background-color: #fff;
   margin: 1rem;
   border-radius: 6px;
@@ -127,13 +135,13 @@ input#search-input:hover {
 }
 
 .card-title {
-  margin: 1rem 0;
+  margin: 1.2rem 0;
   padding: 0 1rem;
-  font-size: 1.7rem;
+  font-size: 1.6rem;
 }
 
 .card p {
-  padding: 0 1rem;
+  padding: 0 1.2rem;
   font-size: 1.2rem;
 }
 
