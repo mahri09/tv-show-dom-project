@@ -10,8 +10,11 @@
       rel="stylesheet"
     />
     <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
   </head>
-
   <body>
     <header>
       <img src="./images/tv-shows-logo.jpg" class="logo" alt="tv-shows-logo" />
@@ -19,11 +22,17 @@
     </header>
     <div class="root">
       <div class="search-container">
+        <button class="showAll-btn hide">
+          <i class="material-icons" style="font-size: 24px">arrow_back</i>All
+          Shows
+        </button>
         <select name="shows" id="select-shows">
-          <option value="starter" selected>Choose one Show</option>
+          <option value="starter" selected>All Shows</option>
         </select>
-        <select name="episodes" id="select-episode">
-          <option value="starter" selected>Choose one Episodes</option>
+        <select name="episodes" id="select-episode" class="hide">
+          <option value="starter" id="staterValue" selected>
+            All Episodes
+          </option>
         </select>
         <input type="text" id="search-input" placeholder="Search" />
         <!-- <i class="fa-solid fa-magnifying-glass"></i> -->
