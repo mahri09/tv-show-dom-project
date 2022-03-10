@@ -2,16 +2,16 @@ let allEpisodes;
 let allShows;
 const cardBody = document.getElementById("card-body");
 const searchInput = document.getElementById("search-input");
-let selectEpisodes = document.getElementById("select-episode");
+let selectInputEpisodes = document.getElementById("select-episode");
 const displayLength = document.querySelector(".display-length");
-const selectShows = document.getElementById("select-shows");
+const selectInputShows = document.getElementById("select-shows");
 let showAllBtn = document.querySelector(".showAll-btn");
 let urlShowId;
 
 let currentPage = "SHOWS";
 
 // works windows.onload
-function setup() {
+function renderShowList() {
   allShows = getAllShows();
   let i,
     j,
@@ -20,11 +20,11 @@ function setup() {
   for (i = 0, j = allShows.length; i < j; i += chunk) {
     temporary = allShows.slice(i, i + chunk);
     makePageForShows(temporary);
-    select(temporary, "shows");
+    addShowToSelectDropdown(temporary);
   }
 }
 
-const twoDigit = (n) => (n < 10 ? "0" + n : n);
+const makeNumberIntoTwoDigits = (n) => (n < 10 ? "0" + n : n);
 const limitText = (text) => {
   return text && text.length > 200
     ? (text = text.substring(0, 200) + "...</p>")
@@ -32,7 +32,7 @@ const limitText = (text) => {
 };
 
 // create episode cards
-const createEpisodeCards = ({ id, image, name, number, season, summary }) => {
+const createEpisodeCard = ({ id, image, name, number, season, summary }) => {
   let imgSrc =
     image && image.medium
       ? image.medium
@@ -46,14 +46,16 @@ const createEpisodeCards = ({ id, image, name, number, season, summary }) => {
   imgDiv.className = "card-image";
   let img = document.createElement("img");
   img.setAttribute("src", imgSrc);
-  let h2El = document.createElement("h2");
-  h2El.className = "card-title";
-  h2El.innerText = `${name} - S${twoDigit(season)}E${twoDigit(number)}`;
+  let title = document.createElement("h2");
+  title.className = "card-title";
+  title.innerText = `${name} - S${makeNumberIntoTwoDigits(
+    season
+  )}E${makeNumberIntoTwoDigits(number)}`;
   let text = document.createElement("div");
   text.innerHTML = limitText(summary);
   imgDiv.appendChild(img);
   cards.appendChild(imgDiv);
-  imgDiv.after(h2El, text);
+  imgDiv.after(title, text);
   return cards;
 };
 
@@ -72,44 +74,49 @@ const createShowCards = ({
   let imgSrc = image
     ? image.original
     : "https://www.thermaxglobal.com/wp-content/uploads/2020/05/image-not-found.jpg";
-  let cards = document.createElement("div");
-  cards.classList = "card show-cards";
-  cards.id = id;
+
+  let card = document.createElement("div");
   let imgDiv = document.createElement("div");
-  imgDiv.className = "show-card-image";
-  cards.appendChild(imgDiv);
   let img = document.createElement("img");
+  let generalInfo = document.createElement("div");
+  let showTitle = document.createElement("h2");
+  let showSummary = document.createElement("div");
+  let extraInfo = document.createElement("div");
+  let ratedValue = document.createElement("span");
+  let genreValue = document.createElement("span");
+  let runTimeValue = document.createElement("span");
+  let statusValue = document.createElement("span");
+
+  card.classList = "card show-cards";
+  card.id = id;
+  imgDiv.className = "show-card-image";
+  card.appendChild(imgDiv);
   img.setAttribute("src", imgSrc);
   imgDiv.appendChild(img);
-  let generalInfo = document.createElement("div");
   generalInfo.className = "general-info";
-  let h2El = document.createElement("h2");
-  h2El.className = "card-title";
-  h2El.innerText = name;
-  generalInfo.appendChild(h2El);
-  let text = document.createElement("div");
-  text.className = "card-text";
-  text.innerHTML = mediaQuery.matches ? summary : limitText(summary);
-  let extraInfo = document.createElement("div");
+  showTitle.className = "card-title";
+  showTitle.innerText = name;
+  generalInfo.appendChild(showTitle);
+  showSummary.className = "card-text";
+  showSummary.innerHTML = mediaQuery.matches ? summary : limitText(summary);
+
   extraInfo.className = "extras";
-  let info1 = document.createElement("span");
-  let info2 = document.createElement("span");
-  let info3 = document.createElement("span");
-  let info4 = document.createElement("span");
-  info1.innerText = `Rated: ${rating.average}`;
-  info2.innerText = `Genres: ${genres}`;
-  info3.innerText = `Runtime: ${runtime}`;
-  info4.innerText = `Status: ${status}`;
-  extraInfo.append(info1, info2, info3, info4);
+  ratedValue.innerText = `Rated: ${rating.average}`;
+  genreValue.innerText = `Genres: ${genres}`;
+  runTimeValue.innerText = `Runtime: ${runtime}`;
+  statusValue.innerText = `Status: ${status}`;
+  extraInfo.append(ratedValue, genreValue, runTimeValue, statusValue);
+
   imgDiv.after(generalInfo);
-  h2El.after(text, extraInfo);
-  return cards;
+  showTitle.after(showSummary, extraInfo);
+
+  return card;
 };
 
 // add episode card to the dom
 const makePageForEpisodes = (episodeList) => {
   episodeList.forEach((item) => {
-    cardBody.appendChild(createEpisodeCards(item));
+    cardBody.appendChild(createEpisodeCard(item));
   });
 };
 
@@ -123,6 +130,7 @@ const makePageForShows = (episodeList) => {
 // search for shows and episodes
 const search = (e) => {
   let searchQuery = e.target.value.toLowerCase();
+
   let filteredEpisodes;
   let filteredShows;
   if (currentPage === "SHOWS") {
@@ -135,7 +143,6 @@ const search = (e) => {
     });
     cardBody.innerHTML = "";
     makePageForShows(filteredShows);
-    console.log(searchQuery);
     displayLength.innerText = `The number of displayed shows is: ${filteredShows.length}/${allShows.length}`;
   } else {
     filteredEpisodes = allEpisodes.filter(({ name, summary }) => {
@@ -149,66 +156,74 @@ const search = (e) => {
     displayLength.innerText = `The number of displayed episodes is ${filteredEpisodes.length}/${allEpisodes.length}`;
   }
 };
-searchInput.addEventListener("input", search);
 
-const select = (listOfItems, selectFor) => {
-  listOfItems.forEach((item) => {
+const addEpisodeToSelectDropdown = (episodes) => {
+  episodes.forEach((episode) => {
     let option = document.createElement("option");
-    if (selectFor === "shows") {
-      option.setAttribute("value", item.id);
-      option.innerText = item.name;
-      selectShows.appendChild(option);
-    } else if (selectFor === "episodes") {
-      option.setAttribute(
-        "value",
-        `S${twoDigit(item.season)}E${twoDigit(item.number)} - ${item.name}`
-      );
-      option.innerText = `S${twoDigit(item.season)}E${twoDigit(
-        item.number
-      )} - ${item.name}`;
-      selectEpisodes.appendChild(option);
-    }
+    const seasonAndEpisodeDetails = getSeasonAndEpisodeDetails(episode);
+    option.setAttribute("value", seasonAndEpisodeDetails);
+    option.innerText = seasonAndEpisodeDetails;
+    selectInputEpisodes.appendChild(option);
   });
 };
 
+const getSeasonAndEpisodeDetails = (episode) => {
+  return `S${makeNumberIntoTwoDigits(episode.season)}E${makeNumberIntoTwoDigits(
+    episode.number
+  )} - ${episode.name}`;
+};
+
+const addShowToSelectDropdown = (listOfItems) => {
+  listOfItems.forEach((item) => {
+    let option = document.createElement("option");
+    option.setAttribute("value", item.id);
+    option.innerText = item.name;
+    selectInputShows.appendChild(option);
+  });
+};
+
+// Event listeners
+
+searchInput.addEventListener("input", search);
+
 // select episodes on each changing
-selectEpisodes.addEventListener("change", (e) => {
+selectInputEpisodes.addEventListener("change", (e) => {
   if (e.target.value === "starter") {
     makePageForEpisodes(allEpisodes);
   } else {
-    let filteredArr = allEpisodes.filter((episode) => {
+    let filteredEpisodes = allEpisodes.filter((episode) => {
       return (
-        `S${twoDigit(episode.season)}E${twoDigit(episode.number)} - ${
-          episode.name
-        }` === e.target.value
+        `S${makeNumberIntoTwoDigits(episode.season)}E${makeNumberIntoTwoDigits(
+          episode.number
+        )} - ${episode.name}` === e.target.value
       );
     });
     cardBody.innerHTML = "";
-    makePageForEpisodes(filteredArr);
+    makePageForEpisodes(filteredEpisodes);
   }
 });
 
 // select shows on each changing
-selectShows.addEventListener("change", (e) => {
+selectInputShows.addEventListener("change", (e) => {
   if (e.target.value !== "starter") urlShowId = e.target.value;
   showAllBtn.classList.remove("hide");
-  selectEpisodes.classList.remove("hide");
-  selectShows.classList.add("hide");
+  selectInputEpisodes.classList.remove("hide");
+  selectInputShows.classList.add("hide");
   searchInput.value = "";
   displayLength.innerText = "";
   currentPage = "EPISODES";
   fetchMovies().then((result) => {
     allEpisodes = result;
-    select(allEpisodes, "episodes");
+    addEpisodeToSelectDropdown(allEpisodes);
     cardBody.innerHTML = "";
     makePageForEpisodes(allEpisodes);
   });
 });
 
 showAllBtn.addEventListener("click", () => {
-  selectEpisodes.classList.add("hide");
-  selectShows.classList.remove("hide");
-  selectShows.value = "starter";
+  selectInputEpisodes.classList.add("hide");
+  selectInputShows.classList.remove("hide");
+  selectInputShows.value = "starter";
   showAllBtn.classList.add("hide");
   cardBody.innerHTML = "";
   searchInput.value = "";
@@ -233,4 +248,4 @@ async function fetchMovies() {
   }
 }
 
-window.onload = setup;
+window.onload = renderShowList;

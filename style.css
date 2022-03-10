@@ -54,12 +54,13 @@ header h1 {
 .search-container {
   display: grid;
   grid-template-columns: repeat(12, 1fr);
+  grid-template-rows: repeat(2, 1fr);
   padding-top: 2rem;
 }
 
 .display-length {
   grid-column: 7/10;
-  grid-row: 2;
+  grid-row: 2/-1;
   margin-top: 1rem;
   font-size: 1.2rem;
   color: rgb(177, 0, 0);
@@ -68,27 +69,34 @@ header h1 {
 select {
   margin-left: 2rem;
   width: 200px;
-  font-size: 1rem;
+  height: 40px;
+  font-size: 0.8rem;
   border: 1px solid rgb(173, 172, 172);
   box-shadow: 0 1px 5px 2px rgba(0, 0, 0, 0.3);
 }
 
 #select-shows {
   grid-column: 4/7;
+  grid-row: 1/2;
 }
 #select-episode {
   grid-column: 4/5;
+  grid-row: 1/2;
 }
 
 .showAll-btn {
   width: 100px;
-  grid-column: 3/4;
+  grid-column: 4/5;
+  grid-row: 2/-1;
+  margin-top: 1rem;
+  margin-left: 2rem;
   display: flex;
   border-radius: 6px;
   border: 1px solid #eee;
   color: #fff;
   align-items: center;
   background-color: rgb(94, 89, 89);
+  padding: 5px 0;
 }
 
 input {
@@ -98,9 +106,12 @@ input {
 }
 
 input#search-input {
-  margin-left: 1rem;
   grid-column: 8/10;
+  grid-row: 1;
+  margin-left: 1rem;
   width: 220px;
+  height: 40px;
+
   border-radius: 6px;
   border: 1px solid #eee;
   padding: 8px 5px;
@@ -169,33 +180,34 @@ input#search-input {
 .general-info .card-title {
   grid-column: 1/-1;
   grid-row: 1/2;
-  font-size: 1.3rem;
+  font-size: 1.1rem;
 }
 
 .general-info .card-text {
   grid-column: 1/-1;
-  grid-row: 2/7;
-  font-size: 1rem;
+  grid-row: 2/5;
+  font-size: 0.9rem;
 }
 
 .extras {
   grid-column: 1/-1;
-  grid-row: 7/-1;
+  grid-row: 5/-1;
+  width: 100%;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  margin: 0 5px 0 5px;
+  border-top: 1px solid rgb(168, 128, 104);
+  box-shadow: 0 0.15em 0.175em hsla(0, 1%, 25%, 0.1);
+
+  margin-left: 16px;
+  margin-top: 10px;
+
+  text-align: left;
 }
 
 .extras span {
-  border: 1px solid rgb(168, 128, 104);
   font-size: 0.9rem;
   font-weight: 500;
-  box-shadow: 0 0.15em 0.175em hsla(0, 1%, 25%, 0.1);
-  border-radius: 30%;
-  margin: 8px;
-  text-align: center;
-  padding: 1rem;
+  padding-top: 10px;
 }
 
 .extras:hover {
@@ -266,6 +278,10 @@ footer {
     font-size: 2rem;
   }
 
+  select {
+    font-size: 16px;
+  }
+
   .extras {
     margin-bottom: 1rem;
     flex-direction: row;
@@ -285,6 +301,8 @@ footer {
 
   input#search-input {
     width: 380px;
+    height: 40px;
+    grid-column: 8/9;
   }
   input#search-input:hover {
     width: 380px;
@@ -297,11 +315,22 @@ footer {
     grid-column: 6/7;
   }
 
-  input#search-input {
-    grid-column: 8/9;
-  }
-
   .showAll-btn {
     grid-column: 5/6;
+    grid-row: 1/2;
+    padding: 6px 16px;
+    margin: 0;
+  }
+
+  .extras {
+    grid-row: 6/-1;
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .extras span {
+    font-size: 1.1rem;
+    font-weight: 600;
+    padding: 1rem;
   }
 }
