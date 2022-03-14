@@ -1,27 +1,21 @@
-let allEpisodes;
-let allShows;
 const cardBody = document.getElementById("card-body");
 const searchInput = document.getElementById("search-input");
-let selectInputEpisodes = document.getElementById("select-episode");
 const displayLength = document.querySelector(".display-length");
 const selectInputShows = document.getElementById("select-shows");
+let selectInputEpisodes = document.getElementById("select-episode");
 let showAllBtn = document.querySelector(".showAll-btn");
-let urlShowId;
 
+let allEpisodes;
+let allShows;
+let urlShowId;
+let clickedShowMore;
 let currentPage = "SHOWS";
 
 // works windows.onload
 function renderShowList() {
   allShows = getAllShows();
-  let i,
-    j,
-    temporary,
-    chunk = 10;
-  for (i = 0, j = allShows.length; i < j; i += chunk) {
-    temporary = allShows.slice(i, i + chunk);
-    makePageForShows(temporary);
-    addShowToSelectDropdown(temporary);
-  }
+  makePageForShows(allShows);
+  addShowToSelectDropdown(allShows);
 }
 
 const makeNumberIntoTwoDigits = (n) => (n < 10 ? "0" + n : n);
@@ -39,27 +33,59 @@ const createEpisodeCard = ({ id, image, name, number, season, summary }) => {
       : "https://www.thermaxglobal.com/wp-content/uploads/2020/05/image-not-found.jpg";
   // Create card element
 
-  let cards = document.createElement("div");
-  cards.classList = "card episode-card";
-  cards.id = id;
+  let card = document.createElement("div");
   let imgDiv = document.createElement("div");
-  imgDiv.className = "card-image";
   let img = document.createElement("img");
-  img.setAttribute("src", imgSrc);
   let title = document.createElement("h2");
+  let episodeSummary = document.createElement("div");
+  let showMoreBtn = document.createElement("button");
+
+  card.id = id;
+  card.classList = "card episode-card";
   title.className = "card-title";
+  imgDiv.className = "card-image";
+  episodeSummary.className = "card-text";
+  img.setAttribute("src", imgSrc);
   title.innerText = `${name} - S${makeNumberIntoTwoDigits(
     season
   )}E${makeNumberIntoTwoDigits(number)}`;
-  let text = document.createElement("div");
-  text.innerHTML = limitText(summary);
+  episodeSummary.innerHTML = limitText(summary);
+
+  if (summary.length > 200) episodeSummary.append(showMoreBtn);
+  showMoreBtn.addEventListener("click", () => {
+    clickedShowMore = !clickedShowMore;
+    if (clickedShowMore) {
+      episodeSummary.innerHTML = summary;
+      episodeSummary.append(showMoreBtn);
+      showMoreBtn.innerText = "Show Less";
+      card.style.overflowY = "scroll";
+    } else {
+      episodeSummary.innerHTML = limitText(summary);
+      episodeSummary.append(showMoreBtn);
+      showMoreBtn.innerText = "Show More";
+      card.style.overflowY = "hidden";
+    }
+  });
+
+  img.addEventListener("click", () => {
+    filteredEpisodes = allEpisodes.filter(({ filteredId }) => {
+      return filteredId === id;
+    });
+    cardBody.innerHTML = "";
+    makePageForEpisodes(filteredEpisodes);
+  });
+
+  showMoreBtn.innerText = "Show More";
+  showMoreBtn.className = "show-more-btn";
+
   imgDiv.appendChild(img);
-  cards.appendChild(imgDiv);
-  imgDiv.after(title, text);
-  return cards;
+  card.appendChild(imgDiv);
+  imgDiv.after(title, episodeSummary);
+  return card;
 };
 
 // create show cards
+
 const createShowCards = ({
   id,
   name,
@@ -70,7 +96,6 @@ const createShowCards = ({
   rating,
   runtime,
 }) => {
-  let mediaQuery = window.matchMedia("(min-width: 650px)");
   let imgSrc = image
     ? image.original
     : "https://www.thermaxglobal.com/wp-content/uploads/2020/05/image-not-found.jpg";
@@ -86,6 +111,7 @@ const createShowCards = ({
   let genreValue = document.createElement("span");
   let runTimeValue = document.createElement("span");
   let statusValue = document.createElement("span");
+  let showMoreBtn = document.createElement("button");
 
   card.classList = "card show-cards";
   card.id = id;
@@ -98,7 +124,37 @@ const createShowCards = ({
   showTitle.innerText = name;
   generalInfo.appendChild(showTitle);
   showSummary.className = "card-text";
-  showSummary.innerHTML = mediaQuery.matches ? summary : limitText(summary);
+  showSummary.innerHTML = limitText(summary);
+  if (summary.length > 200) showSummary.append(showMoreBtn);
+  showMoreBtn.addEventListener("click", () => {
+    clickedShowMore = !clickedShowMore;
+    if (clickedShowMore) {
+      showSummary.innerHTML = summary;
+      showSummary.append(showMoreBtn);
+      showMoreBtn.innerText = "Show Less";
+      card.style.overflowY = "scroll";
+      extraInfo.classList.add("hide");
+    } else {
+      showSummary.innerHTML = limitText(summary);
+      showSummary.append(showMoreBtn);
+      showMoreBtn.innerText = "Show More";
+      card.style.overflowY = "hidden";
+      extraInfo.classList.remove("hide");
+    }
+  });
+
+  img.addEventListener("click", () => {
+    urlShowId = id;
+    openEpisodeOnclickShows();
+  });
+
+  showTitle.addEventListener("click", () => {
+    urlShowId = id;
+    openEpisodeOnclickShows();
+  });
+
+  showMoreBtn.innerText = "Show More";
+  showMoreBtn.className = "show-more-btn";
 
   extraInfo.className = "extras";
   ratedValue.innerText = `Rated: ${rating.average}`;
@@ -182,6 +238,21 @@ const addShowToSelectDropdown = (listOfItems) => {
   });
 };
 
+const openEpisodeOnclickShows = () => {
+  showAllBtn.classList.remove("hide");
+  selectInputEpisodes.classList.remove("hide");
+  selectInputShows.classList.add("hide");
+  searchInput.value = "";
+  displayLength.innerText = "";
+  currentPage = "EPISODES";
+  fetchMovies().then((result) => {
+    allEpisodes = result;
+    addEpisodeToSelectDropdown(allEpisodes);
+    cardBody.innerHTML = "";
+    makePageForEpisodes(allEpisodes);
+  });
+};
+
 // Event listeners
 
 searchInput.addEventListener("input", search);
@@ -206,18 +277,7 @@ selectInputEpisodes.addEventListener("change", (e) => {
 // select shows on each changing
 selectInputShows.addEventListener("change", (e) => {
   if (e.target.value !== "starter") urlShowId = e.target.value;
-  showAllBtn.classList.remove("hide");
-  selectInputEpisodes.classList.remove("hide");
-  selectInputShows.classList.add("hide");
-  searchInput.value = "";
-  displayLength.innerText = "";
-  currentPage = "EPISODES";
-  fetchMovies().then((result) => {
-    allEpisodes = result;
-    addEpisodeToSelectDropdown(allEpisodes);
-    cardBody.innerHTML = "";
-    makePageForEpisodes(allEpisodes);
-  });
+  openEpisodeOnclickShows();
 });
 
 showAllBtn.addEventListener("click", () => {
