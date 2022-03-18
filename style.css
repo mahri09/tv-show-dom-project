@@ -128,7 +128,7 @@ input#search-input {
   justify-content: center;
   width: 100%;
   margin: 0 auto;
-  margin: 2rem;
+  overflow: hidden;
 }
 
 .card {
@@ -140,8 +140,8 @@ input#search-input {
 }
 
 .episode-card {
-  width: 420px;
-  height: 470px;
+  width: 400px;
+  height: 430px;
 }
 
 .card:hover {
@@ -151,8 +151,8 @@ input#search-input {
 
 .show-cards {
   margin: 1.3rem 0;
-  width: 500px;
-  height: 450px;
+  width: 480px;
+  height: 440px;
   display: grid;
   grid-template-columns: repeat(12, 1fr);
   grid-template-rows: repeat(4, 1fr);
@@ -189,7 +189,7 @@ input#search-input {
 
 .general-info .card-text {
   grid-column: 1/-1;
-  grid-row: 2/5;
+  grid-row: 2/6;
   font-size: 0.9rem;
   z-index: 10;
 }
@@ -235,7 +235,7 @@ input#search-input {
 }
 
 .card-title {
-  margin: 1.2rem 0;
+  margin-top: 1rem;
   padding: 0 1rem;
   font-size: 1.6rem;
 }
@@ -289,20 +289,41 @@ footer {
   margin-top: 10px;
 }
 
-@media only screen and (min-width: 650px) {
+@media only screen and (min-width: 680px) {
   header {
-    width: 1150px;
     margin: 0 auto;
   }
 
   #card-body {
-    width: 1500px;
     margin: auto;
   }
 
   .show-cards {
-    width: 1100px;
-    height: 330px;
+    width: 650px;
+    height: 370px;
+    padding-bottom: 1rem;
+  }
+
+  .extras span {
+    font-size: 0.8rem;
+    padding-top: 5px;
+  }
+}
+
+@media only screen and (min-width: 860px) {
+  header {
+    width: 950px;
+    margin: 0 auto;
+  }
+
+  #card-body {
+    width: 950px;
+    margin: auto;
+  }
+
+  .show-cards {
+    width: 850px;
+    height: 325px;
     margin: 2rem;
   }
 
@@ -316,13 +337,14 @@ footer {
   }
 
   .general-info .card-title {
-    font-size: 2rem;
+    font-size: 1.8rem;
   }
   .general-info .card-text {
+    margin-top: 1rem;
     font-size: 1.1rem;
   }
   select {
-    font-size: 16px;
+    font-size: 14px;
   }
 
   .extras {
@@ -331,8 +353,9 @@ footer {
   }
   .extras span {
     padding: 1rem;
-    font-size: 1.1rem;
+    font-size: 1rem;
   }
+
   .show-card-image {
     width: 200px;
     height: 100%;
@@ -375,5 +398,34 @@ footer {
     font-size: 1.1rem;
     font-weight: 600;
     padding: 1rem;
+  }
+}
+
+@media only screen and (min-width: 1300px) {
+  header {
+    width: 1150px;
+  }
+
+  #card-body {
+    width: 1500px;
+  }
+
+  .show-cards {
+    width: 1100px;
+    height: 325px;
+  }
+
+  .general-info .card-title {
+    font-size: 2rem;
+  }
+  .general-info .card-text {
+    font-size: 1.4rem;
+  }
+  select {
+    font-size: 16px;
+  }
+
+  .extras span {
+    font-size: 1.1rem;
   }
 }
